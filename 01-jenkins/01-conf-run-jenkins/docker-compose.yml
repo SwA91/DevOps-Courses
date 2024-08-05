@@ -1,0 +1,18 @@
+version: "3"
+services:
+  jenkins:
+    image: jenkins/jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+    container_name: jenkins
+    privileged: true
+    user: root
+    volumes:
+      - jenkins-swa:/var/jenkins_home
+    networks:
+      - net
+networks:
+  net:
+volumes:
+  jenkins-swa:
