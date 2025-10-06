@@ -10,7 +10,10 @@ services:
     image: postgres:15.1
     volumes:
     # usamos este volumen declarado
-      - postgres-db-volu:/var/lib/postgresql/data
+      # - postgres-db-volu:/var/lib/postgresql/data
+      # bind con una carpeta local
+      # todo lo que se grabe en el contenedor se grabara en local
+      - ./postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=123456
   # contenedor para el pgadmin
@@ -21,12 +24,15 @@ services:
     image: dpage/pgadmin4:6.17
     ports:
       - "8080:80"
+    volumes:
+      # volcamos todo lo del contenedor en local
+      - ./pgadmin:/var/lib/pgadmin
     environment:
       - PGADMIN_DEFAULT_PASSWORD=123456
       - PGADMIN_DEFAULT_EMAIL=superman@google.com
 # declaramos los volumenes a usar/crear
-volumes:
+# volumes:
   # al no declara nada mas, docker creara ese volumen
-  postgres-db-volu:
+  # postgres-db-volu:
     # conecta con un volumen existente
-    external: true
+    # external: true
