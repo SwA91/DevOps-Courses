@@ -6,8 +6,10 @@ services:
     volumes:
       - poke-vol:/data/db
     # ojo con mongo en local
-    ports:
-      - 27017:27017
+    # no hace falta exponerlo ya que otro container lo usa
+    # mejor no exponerlo al mundo sino a otro contenedor dentro de network
+    # ports:
+    #   - 27017:27017
     # siempre reinicia el servicio
     restart: always
     # variables que mongo acepta
@@ -17,6 +19,35 @@ services:
     # mandamos commandos
     # auth obliga autenticarse
     command: ["--auth"]
+  mongo-express:
+    depends_on:
+      - db
+    image: mongo-express:1.0.0-alpha.4
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+      # En el network se reutiliza esta variable
+      ME_CONFIG_MONGODB_SERVER: ${MONGO_DB_NAME}
+    ports:
+      - 8080:8081
+    restart: always
+
+  # app consumidora de la db
+  poke-app:
+    # dependemos de dos servicios
+    depends_on:
+      - db
+      - mongo-express
+    # nos traemos la imagen de la app
+    image: klerith/pokemon-nest-app:1.0.0
+    # el desarrollador tiene que explicar que puerto expone
+    ports:
+      - 3000:3000
+    # el desarrollador tiene que decir que variables necesita
+    environment:
+      MONGODB: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_DB_NAME}:27017
+      DB_NAME: ${MONGO_DB_NAME}
+    restart: always
 
 volumes:
   poke-vol:
