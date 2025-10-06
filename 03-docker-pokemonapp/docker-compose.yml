@@ -1,0 +1,24 @@
+services:
+  db:
+    # ${variable env}
+    container_name: ${MONGO_DB_NAME}
+    image: mongo:6.0
+    volumes:
+      - poke-vol:/data/db
+    # ojo con mongo en local
+    ports:
+      - 27017:27017
+    # siempre reinicia el servicio
+    restart: always
+    # variables que mongo acepta
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    # mandamos commandos
+    # auth obliga autenticarse
+    command: ["--auth"]
+
+volumes:
+  poke-vol:
+    # obligamos a que se cree un nuevo volumen
+    external: false
