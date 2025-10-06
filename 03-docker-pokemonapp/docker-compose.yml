@@ -45,6 +45,7 @@ services:
       - 3000:3000
     # el desarrollador tiene que decir que variables necesita
     environment:
+      # MONGO_DB_NAME es el nombre del contenedor donde esta desplegado la bbdd
       MONGODB: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_DB_NAME}:27017
       DB_NAME: ${MONGO_DB_NAME}
     restart: always
