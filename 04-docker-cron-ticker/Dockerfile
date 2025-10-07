@@ -1,4 +1,5 @@
 # Va coger el buildx por defecto seleccionado por consola
+# docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/amd64/v2 -t swa91/cron-ticker:latest --push .
 FROM --platform=$BUILDPLATFORM node:19.2-alpine3.16
 
 # FROM --platform=linux/amd64 node:19.2-alpine3.16
