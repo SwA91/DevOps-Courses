@@ -19,12 +19,6 @@ COPY . .
 # realizar test
 RUN npm run test
 
-# eliminar archivos y directorios innecesarios en PROD
-# remove r:recursivo f:forzado
-RUN rm -rf tests && rm -rf node_modules
-
-# solo dependencias de PROD
-RUN npm install --prod
 
 # comando a ejecutar cuando se levante el container
 CMD ["node", "app.js"]
