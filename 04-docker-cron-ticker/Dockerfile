@@ -1,30 +1,33 @@
-# Va coger el buildx por defecto seleccionado por consola
-# docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7,linux/amd64/v2 -t swa91/cron-ticker:latest --push .
-FROM --platform=$BUILDPLATFORM node:19.2-alpine3.16
-
-# FROM --platform=linux/amd64 node:19.2-alpine3.16
-# esta imagen internamente tiene una carpeta app
-
-# cambiamos de directorio a app
+# ...:::primera etapada:::...
+FROM node:19.2-alpine3.16 AS alias-dependencias
 WORKDIR /app
-
 COPY  package.json ./
-
-# instalamos dependencias de la app
 RUN npm install
 
-#copiamos todo, mal!
+# ...:::segunda etapa, imagen nueva:::...
+FROM node:19.2-alpine3.16 AS alias-builder
+WORKDIR /app
+# copiamos de alguna ruta de nuestra primera etapada
+COPY --from=alias-dependencias /app/node_modules ./app/
+# de nuestra ruta local haciendo uso de dockerignore copiamos todo
+# y lo pegamos en el workdir
 COPY . .
-
 # realizar test
 RUN npm run test
+# aqui iria para hacer el build de PROD
+# RUN npm run build
 
-# eliminar archivos y directorios innecesarios en PROD
-# remove r:recursivo f:forzado
-RUN rm -rf tests && rm -rf node_modules
-
-# solo dependencias de PROD
+# ...:::tercer etapa, imagen nueva:::...
+FROM node:19.2-alpine3.16 AS alias-prod-deps
+WORKDIR /app
+COPY  package.json ./
 RUN npm install --prod
 
-# comando a ejecutar cuando se levante el container
+# ...:::cuarta etapa:::...
+FROM node:19.2-alpine3.16 AS alias-runner
+WORKDIR /app
+COPY --from=alias-prod-deps /app/node_modules ./node_modules
+COPY app.js ./
+# todo lo de la carpeta lo copia en la nueva
+COPY tasks/ ./tasks
 CMD ["node", "app.js"]
