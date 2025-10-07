@@ -1,4 +1,12 @@
 
+FROM node:19-alpine3.15 as dev
+WORKDIR /app
+# traigo mi package.json al contenedor
+COPY package.json ./
+RUN yarn install 
+# lo ejecutamos en el compose
+# CMD [ "yarn", "start:dev" ]
+
 FROM node:19-alpine3.15 as dev-deps
 WORKDIR /app
 COPY package.json package.json
@@ -15,7 +23,7 @@ RUN yarn build
 FROM node:19-alpine3.15 as prod-deps
 WORKDIR /app
 COPY package.json package.json
-RUN yarn install --frozen-lockfile
+RUN yarn install --prod --frozen-lockfile
 
 
 FROM node:19-alpine3.15 as prod
