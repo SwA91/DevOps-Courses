@@ -24,5 +24,14 @@ http://localhost:3000/api/seed
 
 
 # Production notes:
+Ejecutar este comando
+```
+docker compose -f docker-compose.prod.yml up
+```
+
+Para construir un servicio en concreto seria
+```
+docker compose -f docker-compose.prod.yml build app
+```
 
 

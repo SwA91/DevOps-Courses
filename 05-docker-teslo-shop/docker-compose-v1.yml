@@ -6,7 +6,7 @@ services:
       # mi ruta local lo uso de contexto
       context: .
       # que alias ejecuto del dockerfile
-      target: ${STAGE}
+      target: dev
       # que dockerfile quiero usar
       dockerfile: Dockerfile
     # arranca la app

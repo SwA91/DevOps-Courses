@@ -1,23 +1,12 @@
-# version: '3'
-
 services:
   app:
     build:
-      # mi ruta local lo uso de contexto
       context: .
-      # que alias ejecuto del dockerfile
       target: ${STAGE}
-      # que dockerfile quiero usar
       dockerfile: Dockerfile
+      # nombre de la imagen a crear
+    image: swa91/teslo-shop-backend:2.5.0
     # arranca la app
-    command: yarn start:dev
-    # evitar el bind module
-    volumes:
-      # . nuestra carpeta local es mapeada en /app
-      - .:/app/
-      # mapeo el node_modules del contenedor
-      # crea un volumen anonimo y es mapea el contenedor
-      - /app/node_modules
     container_name: nest-app-cont
     ports:
       - ${PORT}:${PORT}
