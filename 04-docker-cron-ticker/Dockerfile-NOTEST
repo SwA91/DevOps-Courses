@@ -8,17 +8,12 @@ FROM node:19.2-alpine3.16
 # cambiamos de directorio a app
 WORKDIR /app
 
-COPY  package.json ./
+# copiamos los archivos necesarios para arrancar y lanzar nuestra app
+# lo pegamos en la ruta que ya nos movimos
+COPY app.js package.json ./
 
 # instalamos dependencias de la app
 RUN npm install
-
-#copiamos todo, mal!
-COPY . .
-
-# realizar test
-RUN npm run test
-
 
 # comando a ejecutar cuando se levante el container
 CMD ["node", "app.js"]
