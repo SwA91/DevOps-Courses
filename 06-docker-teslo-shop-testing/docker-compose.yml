@@ -1,8 +1,8 @@
 services:
   app:
     image: swa91/teslo-shop:1.0.0
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     container_name: teslo-backend
     ports:
       - ${PORT}:${PORT}
@@ -17,19 +17,18 @@ services:
       PORT: ${PORT}
       HOST_API: ${HOST_API}
       JWT_SECRET: ${JWT_SECRET}
+#   db:
+#     image: postgres:14.3
+#     restart: always
+#     ports:
+#       - "5432:5432"
+#     environment:
+#       POSTGRES_PASSWORD: ${DB_PASSWORD}
+#       POSTGRES_DB: ${DB_NAME}
+#     container_name: ${DB_NAME}
+#     volumes:
+#       - postgres-db:/var/lib/postgresql/data
 
-  db:
-    image: postgres:14.3
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
-    container_name: ${DB_NAME}
-    volumes:
-      - postgres-db:/var/lib/postgresql/data
-
-volumes:
-  postgres-db:
-    external: false
+# volumes:
+#   postgres-db:
+#     external: false
