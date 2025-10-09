@@ -2,35 +2,34 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "docker-graphql" ]
+    branches: ["docker-graphql"]
   pull_request:
-    branches: [ "docker-graphql" ]
+    branches: ["docker-graphql"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    # paso checkout
-    - name: Checkout Code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      # paso checkout
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    # paso docker login
-    - name: Docker login
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: | 
-        echo "Iniciando login..."
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        echo "Fin del login..."
+      # paso docker login
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
-    
-    
-    
-    # - name: Build the Docker image
-    #   run: docker build . --file ./07-docker-graphql-actions/Dockerfile --tag my-image-name:$(date +%s)
+        # construimos la imagen
+      - name: Build the Docker image
+        run: |
+          docker build -t swa91/docker-graphql:0.0.2 .
+
+      - name: Push the Docker image
+        run: |
+          docker push -t swa91/docker-graphql:0.0.2 .
