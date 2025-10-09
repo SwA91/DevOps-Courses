@@ -28,8 +28,8 @@ jobs:
         # construimos la imagen
       - name: Build the Docker image
         run: |
-          docker build -t swa91/docker-graphql:0.0.2 ./07-docker-graphql-actions/Dockerfile
+          docker build -t swa91/docker-graphql:0.0.2 --file ./07-docker-graphql-actions/Dockerfile
 
       - name: Push the Docker image
         run: |
-          docker push -t swa91/docker-graphql:0.0.2 ./07-docker-graphql-actions/Dockerfile
+          docker push -t swa91/docker-graphql:0.0.2 --file ./07-docker-graphql-actions/Dockerfile
