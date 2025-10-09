@@ -26,10 +26,9 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
 
         # construimos la imagen
-      - name: Build the Docker image
-        run: |
-          docker build -t swa91/docker-graphql:0.0.2 --file ./07-docker-graphql-actions/Dockerfile
-
-      - name: Push the Docker image
-        run: |
-          docker push -t swa91/docker-graphql:0.0.2 --file ./07-docker-graphql-actions/Dockerfile
+      - name: Build and Push the Docker image
+        uses: docker/build-push-action@v3
+        with:
+          push: true
+          file: ./07-docker-graphql-actions/Dockerfile
+          tags: ${{secrets.DOCKER_USER}}/docker-graphql:0.0.2
