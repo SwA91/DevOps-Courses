@@ -1,0 +1,36 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "docker-graphql" ]
+  pull_request:
+    branches: [ "docker-graphql" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    # paso checkout
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    # paso docker login
+    - name: Docker login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: | 
+        echo "Iniciando login..."
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        echo "Fin del login..."
+
+    
+    
+    
+    # - name: Build the Docker image
+    #   run: docker build . --file ./07-docker-graphql-actions/Dockerfile --tag my-image-name:$(date +%s)
